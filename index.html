@@ -1,0 +1,1012 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Java Nivel 1 — Principiante | Ruta360</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#0b0e14; --surface:#111520; --card:#161b28; --border:#1e2840; --border2:#2a3650;
+  --java:#f89820; --java2:#e05252; --java3:#5b9bd5; --java4:#8cba3e; --java5:#c792ea;
+  --green:#4ec9b0; --yellow:#dcdcaa; --string:#ce9178; --comment:#6a9955;
+  --text:#d4daf0; --muted:#5a6a8a; --success:#4ade80; --error:#f87171;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'Outfit',sans-serif;min-height:100vh;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(248,152,32,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(248,152,32,.025) 1px,transparent 1px);background-size:48px 48px;pointer-events:none;z-index:0}
+.wrap{max-width:980px;margin:0 auto;padding:0 20px 80px;position:relative;z-index:1}
+
+/* HERO */
+.hero{text-align:center;padding:40px 0 36px;animation:fadeDown .6s ease both}
+.hero img{height:58px;margin-bottom:14px}
+.level-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(248,152,32,.1);border:1px solid var(--java);padding:5px 16px;border-radius:3px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--java);letter-spacing:2px;margin-bottom:16px}
+.hero h1{font-size:clamp(2rem,6vw,3.4rem);font-weight:800;line-height:1.05;margin-bottom:8px}
+.hero h1 span{color:var(--java)}
+.hero p{color:var(--muted);font-size:14px;max-width:460px;margin:0 auto 28px;line-height:1.7}
+.hero-stats{display:flex;justify-content:center;gap:24px;flex-wrap:wrap}
+.hstat{text-align:center}
+.hstat-n{font-size:22px;font-weight:800;color:var(--java)}
+.hstat-l{font-size:11px;color:var(--muted);font-family:'JetBrains Mono',monospace;letter-spacing:1px}
+
+/* LAYOUT */
+.layout{display:grid;grid-template-columns:210px 1fr;gap:18px;margin-top:28px}
+@media(max-width:660px){.layout{grid-template-columns:1fr}}
+
+/* SIDEBAR */
+.sidebar{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:10px 8px;height:fit-content;position:sticky;top:18px;animation:fadeUp .5s .15s ease both}
+.sb-title{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:2px;color:var(--muted);padding:4px 8px 10px;border-bottom:1px solid var(--border);margin-bottom:8px;text-transform:uppercase}
+.sb-btn{display:block;width:100%;padding:8px 10px;background:transparent;border:none;text-align:left;cursor:pointer;font-family:'Outfit',sans-serif;font-size:12px;font-weight:500;color:var(--muted);border-radius:3px;transition:all .15s;position:relative;line-height:1.35}
+.sb-btn:hover{color:var(--text);background:var(--card)}
+.sb-btn.active{color:var(--java);background:var(--card);border-left:2px solid var(--java);padding-left:8px}
+.sb-btn.done{color:var(--success)}
+.sb-btn.done::after{content:' ✓';font-size:10px}
+.sb-sep{height:1px;background:var(--border);margin:6px 4px}
+
+/* PANEL */
+.panel{display:none;animation:fadeUp .3s ease both}
+.panel.active{display:block}
+
+/* LESSON CARD */
+.lcard{background:var(--surface);border:1px solid var(--border);border-radius:6px;overflow:hidden;margin-bottom:14px}
+.lcard-head{padding:18px 22px 14px;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;gap:12px}
+.lcard-icon{width:38px;height:38px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;background:rgba(248,152,32,.12);border:1px solid rgba(248,152,32,.3)}
+.lcard-num{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:2px;color:var(--muted);margin-bottom:3px}
+.lcard-title{font-size:1.1rem;font-weight:700}
+.lcard-body{padding:22px}
+
+/* THEORY */
+.t-section{margin-bottom:22px}
+.t-section h3{font-size:13px;font-weight:700;color:var(--java);margin-bottom:10px;display:flex;align-items:center;gap:6px;text-transform:uppercase;letter-spacing:.5px}
+.t-section h3::before{content:'//';font-family:'JetBrains Mono',monospace;color:var(--comment);font-size:11px}
+.t-section p{font-size:13px;color:var(--muted);line-height:1.8;margin-bottom:8px}
+.t-section ul{padding-left:18px}
+.t-section ul li{font-size:13px;color:var(--muted);line-height:1.8;margin-bottom:3px}
+.t-section ul li strong{color:var(--text)}
+
+/* CONCEPT CARDS */
+.concept-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:8px;margin:12px 0}
+.ccard{background:var(--card);border:1px solid var(--border);border-radius:4px;padding:11px 13px;border-top:2px solid var(--java)}
+.ccard-kw{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;color:var(--java);margin-bottom:3px}
+.ccard-desc{font-size:11px;color:var(--muted);line-height:1.5}
+
+/* CODE */
+.code-wrap{background:#0d1117;border:1px solid var(--border2);border-radius:6px;overflow:hidden;margin:12px 0;font-size:12px}
+.code-bar{background:#161b22;padding:7px 14px;display:flex;align-items:center;gap:7px;border-bottom:1px solid var(--border2)}
+.code-dots{display:flex;gap:4px}
+.cdot{width:9px;height:9px;border-radius:50%}
+.cr{background:#ff5f57}.cy{background:#febc2e}.cg{background:#28c840}
+.code-file{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);margin-left:4px}
+.code-body{padding:14px 18px;overflow-x:auto}
+.code-body pre{font-family:'JetBrains Mono',monospace;line-height:1.75;white-space:pre}
+.kw{color:#c792ea}.cls{color:#82aaff}.fn{color:#dcdcaa}.str{color:#ce9178}
+.num{color:#b5cea8}.cmt{color:#6a9955;font-style:italic}.tp{color:#4ec9b0}
+.var{color:#9cdcfe}.op{color:#89ddff}.ann{color:#4ec9b0}
+
+/* INFO BOX */
+.ibox{background:var(--card);border-left:3px solid var(--java3);border-radius:0 4px 4px 0;padding:11px 14px;margin:12px 0;font-size:13px;color:var(--text);line-height:1.7}
+.ibox.warn{border-color:var(--java2)}
+.ibox.tip{border-color:var(--java4)}
+.ibox-lbl{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:1.5px;color:var(--muted);margin-bottom:4px;text-transform:uppercase}
+
+/* TABLE */
+.jtable{width:100%;border-collapse:collapse;margin:12px 0;font-size:12px}
+.jtable th{background:var(--card);padding:8px 12px;text-align:left;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);border-bottom:1px solid var(--border2);letter-spacing:1px}
+.jtable td{padding:8px 12px;border-bottom:1px solid var(--border);color:var(--text)}
+.jtable tr:last-child td{border-bottom:none}
+.jtable td:first-child{font-family:'JetBrains Mono',monospace;color:var(--java)}
+
+/* QUIZ */
+.quiz{background:var(--card);border:1px solid var(--border2);border-radius:6px;padding:22px;margin-top:14px}
+.quiz-head{display:flex;align-items:center;gap:10px;margin-bottom:18px;padding-bottom:12px;border-bottom:1px solid var(--border)}
+.quiz-title{font-size:14px;font-weight:700}
+.quiz-sub{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted)}
+.qprog{height:3px;background:var(--border);border-radius:2px;margin-bottom:18px;overflow:hidden}
+.qprog-fill{height:100%;background:linear-gradient(90deg,var(--java),var(--java2));border-radius:2px;transition:width .3s}
+.quiz-q{margin-bottom:20px}
+.qq-num{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);margin-bottom:5px;letter-spacing:1px}
+.qq-text{font-size:13px;font-weight:600;margin-bottom:11px;line-height:1.6}
+.qq-code{background:#0d1117;border:1px solid var(--border2);border-radius:4px;padding:10px 14px;margin-bottom:11px;font-family:'JetBrains Mono',monospace;font-size:12px;line-height:1.7;overflow-x:auto}
+.quiz-opts{display:flex;flex-direction:column;gap:6px}
+.qopt{background:var(--surface);border:1px solid var(--border);border-radius:3px;padding:9px 13px;cursor:pointer;text-align:left;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text);transition:all .15s;line-height:1.5;width:100%}
+.qopt:hover:not(:disabled){border-color:var(--java);color:var(--java)}
+.qopt.correct{border-color:var(--success);color:var(--success);background:rgba(74,222,128,.07)}
+.qopt.wrong{border-color:var(--error);color:var(--error);background:rgba(248,113,113,.07)}
+.qopt:disabled{cursor:default}
+.qfb{font-size:12px;margin-top:7px;padding:7px 11px;border-radius:3px;display:none;line-height:1.6}
+.qfb.ok{background:rgba(74,222,128,.07);color:var(--success);border:1px solid var(--success)}
+.qfb.fail{background:rgba(248,113,113,.07);color:var(--error);border:1px solid var(--error)}
+.quiz-result{display:none;text-align:center;padding:24px 16px;margin-top:18px;background:var(--surface);border:1px solid var(--border2);border-radius:5px}
+.qr-score{font-size:52px;font-weight:800;margin-bottom:4px}
+.qr-lbl{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:2px;margin-bottom:12px}
+.qr-msg{font-size:13px;color:var(--muted);margin-bottom:18px;line-height:1.7}
+
+/* BUTTONS */
+.btn{padding:10px 22px;border:1px solid;background:transparent;font-family:'Outfit',sans-serif;font-size:13px;font-weight:700;cursor:pointer;border-radius:3px;transition:all .15s}
+.btn-java{border-color:var(--java);color:var(--java)}
+.btn-java:hover{background:var(--java);color:var(--bg)}
+.btn-next{display:flex;align-items:center;justify-content:center;gap:7px;width:100%;padding:12px;border:1px solid var(--java);background:transparent;color:var(--java);font-family:'Outfit',sans-serif;font-size:13px;font-weight:700;cursor:pointer;border-radius:4px;margin-top:12px;transition:all .15s}
+.btn-next:hover{background:var(--java);color:var(--bg)}
+.btn-next:disabled{opacity:.3;cursor:default;border-color:var(--border);color:var(--muted)}
+.btn-muted{border-color:var(--border);color:var(--muted)}
+.btn-muted:hover{border-color:var(--text);color:var(--text)}
+.btn-success{border-color:var(--success);color:var(--success)}
+.btn-success:hover{background:var(--success);color:var(--bg)}
+
+/* COMPLETE */
+.complete{display:none;text-align:center;background:var(--surface);border:1px solid var(--border2);border-radius:6px;padding:48px 24px;margin-top:14px}
+.comp-emoji{font-size:54px;margin-bottom:12px}
+.comp-title{font-size:1.7rem;font-weight:800;margin-bottom:8px;color:var(--java)}
+.comp-sub{color:var(--muted);font-size:13px;margin-bottom:24px;line-height:1.7;max-width:420px;margin-left:auto;margin-right:auto}
+.btn-row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+
+@keyframes fadeDown{from{opacity:0;transform:translateY(-14px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<!-- HERO -->
+<header class="hero">
+  <img src="LOGO_SRC" alt="Ruta360">
+  <div class="level-badge">☕ JAVA · NIVEL 1 · PRINCIPIANTE</div>
+  <h1>Aprende <span>Java</span><br>desde cero</h1>
+  <p>Variables, tipos de datos, operadores, condicionales, ciclos y métodos. Todo con teoría visual y quiz al final de cada tema.</p>
+  <div class="hero-stats">
+    <div class="hstat"><div class="hstat-n">6</div><div class="hstat-lbl">TEMAS</div></div>
+    <div class="hstat"><div class="hstat-n">30</div><div class="hstat-lbl">PREGUNTAS</div></div>
+    <div class="hstat"><div class="hstat-n">~2h</div><div class="hstat-lbl">DURACIÓN</div></div>
+  </div>
+</header>
+
+<div class="layout">
+<!-- SIDEBAR -->
+<nav class="sidebar">
+  <div class="sb-title">📋 Temas</div>
+  <button class="sb-btn active" onclick="showPanel(0,this)">1. Variables &amp; Tipos</button>
+  <button class="sb-btn" onclick="showPanel(1,this)">2. Operadores</button>
+  <button class="sb-btn" onclick="showPanel(2,this)">3. Condicionales</button>
+  <button class="sb-btn" onclick="showPanel(3,this)">4. Ciclos</button>
+  <button class="sb-btn" onclick="showPanel(4,this)">5. Arrays</button>
+  <button class="sb-btn" onclick="showPanel(5,this)">6. Métodos</button>
+  <div class="sb-sep"></div>
+  <div style="padding:6px 10px;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted)">
+    Progreso: <span id="progTxt" style="color:var(--java)">0 / 6</span>
+  </div>
+</nav>
+
+<!-- PANELS -->
+<main>
+
+<!-- ══════════════════════════════════════
+     TEMA 1: VARIABLES & TIPOS DE DATOS
+══════════════════════════════════════ -->
+<div class="panel active" id="p0">
+  <div class="lcard">
+    <div class="lcard-head">
+      <div class="lcard-icon">📦</div>
+      <div><div class="lcard-num">TEMA 01 / 06</div><div class="lcard-title">Variables &amp; Tipos de Datos</div></div>
+    </div>
+    <div class="lcard-body">
+
+      <div class="t-section">
+        <h3>¿Qué es una variable?</h3>
+        <p>Una variable es un <strong>espacio en memoria</strong> donde guardas un valor. En Java debes declarar el <strong>tipo</strong> antes del nombre. Java es un lenguaje <em>fuertemente tipado</em>: no puedes mezclar tipos sin conversión.</p>
+        <div class="ibox"><div class="ibox-lbl">📌 Sintaxis</div><code style="font-family:'JetBrains Mono',monospace;font-size:12px">tipo nombreVariable = valor;</code></div>
+      </div>
+
+      <div class="t-section">
+        <h3>Tipos Primitivos</h3>
+        <table class="jtable">
+          <tr><th>Tipo</th><th>Tamaño</th><th>Ejemplo</th><th>Uso</th></tr>
+          <tr><td>int</td><td>32 bits</td><td>int edad = 25;</td><td>Números enteros</td></tr>
+          <tr><td>double</td><td>64 bits</td><td>double precio = 9.99;</td><td>Decimales</td></tr>
+          <tr><td>boolean</td><td>1 bit</td><td>boolean activo = true;</td><td>true / false</td></tr>
+          <tr><td>char</td><td>16 bits</td><td>char letra = 'A';</td><td>Un carácter</td></tr>
+          <tr><td>long</td><td>64 bits</td><td>long big = 9999999L;</td><td>Enteros grandes</td></tr>
+          <tr><td>float</td><td>32 bits</td><td>float n = 3.14f;</td><td>Decimal menos preciso</td></tr>
+        </table>
+      </div>
+
+      <div class="t-section">
+        <h3>String — Tipo Referencia</h3>
+        <p><strong>String</strong> no es un tipo primitivo, es una clase. Se escribe con mayúscula y se usa para texto.</p>
+        <div class="code-wrap">
+          <div class="code-bar"><div class="code-dots"><span class="cdot cr"></span><span class="cdot cy"></span><span class="cdot cg"></span></div><span class="code-file">Main.java</span></div>
+          <div class="code-body"><pre><span class="kw">public class</span> <span class="cls">Main</span> {
+    <span class="kw">public static void</span> <span class="fn">main</span>(<span class="tp">String</span>[] args) {
+
+        <span class="cmt">// Variables primitivas</span>
+        <span class="kw">int</span> <span class="var">edad</span> = <span class="num">22</span>;
+        <span class="kw">double</span> <span class="var">salario</span> = <span class="num">1500.50</span>;
+        <span class="kw">boolean</span> <span class="var">activo</span> = <span class="kw">true</span>;
+        <span class="kw">char</span> <span class="var">inicial</span> = <span class="str">'J'</span>;
+
+        <span class="cmt">// Variable de tipo referencia</span>
+        <span class="tp">String</span> <span class="var">nombre</span> = <span class="str">"Carlos"</span>;
+
+        <span class="cmt">// Imprimir en consola</span>
+        <span class="tp">System</span>.out.<span class="fn">println</span>(<span class="str">"Nombre: "</span> + <span class="var">nombre</span>);
+        <span class="tp">System</span>.out.<span class="fn">println</span>(<span class="str">"Edad: "</span> + <span class="var">edad</span>);
+        <span class="tp">System</span>.out.<span class="fn">println</span>(<span class="str">"Activo: "</span> + <span class="var">activo</span>);
+    }
+}</pre></div>
+        </div>
+      </div>
+
+      <div class="t-section">
+        <h3>Constantes con final</h3>
+        <p>Usa <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--java)">final</code> para declarar un valor que no puede cambiar. Por convención se escribe en MAYÚSCULAS.</p>
+        <div class="code-wrap">
+          <div class="code-bar"><div class="code-dots"><span class="cdot cr"></span><span class="cdot cy"></span><span class="cdot cg"></span></div><span class="code-file">Constantes.java</span></div>
+          <div class="code-body"><pre><span class="kw">final double</span> <span class="var">PI</span> = <span class="num">3.14159</span>;
+<span class="kw">final int</span> <span class="var">MAX_USUARIOS</span> = <span class="num">100</span>;
+<span class="cmt">// PI = 3.0; ← ERROR: no se puede reasignar</span></pre></div>
+        </div>
+      </div>
+
+      <div class="ibox tip"><div class="ibox-lbl">💡 TIP</div>Usa nombres <strong>descriptivos</strong> en camelCase: <code style="font-family:'JetBrains Mono',monospace;font-size:12px">nombreUsuario</code>, <code style="font-family:'JetBrains Mono',monospace;font-size:12px">totalVentas</code>. Evita: <code style="font-family:'JetBrains Mono',monospace;font-size:12px">x</code>, <code style="font-family:'JetBrains Mono',monospace;font-size:12px">a1</code>, <code style="font-family:'JetBrains Mono',monospace;font-size:12px">temp</code>.</div>
+
+    </div>
+  </div><!-- /lcard -->
+
+  <!-- QUIZ 1 -->
+  <div class="quiz" id="quiz0">
+    <div class="quiz-head">
+      <span style="font-size:20px">🎯</span>
+      <div><div class="quiz-title">Quiz — Variables &amp; Tipos</div><div class="quiz-sub" id="qsub0">5 PREGUNTAS</div></div>
+    </div>
+    <div class="qprog"><div class="qprog-fill" id="qpfill0" style="width:0%"></div></div>
+    <div id="qbody0"></div>
+    <div class="quiz-result" id="qresult0">
+      <div class="qr-score" id="qrscore0"></div>
+      <div class="qr-lbl">RESULTADO FINAL</div>
+      <div class="qr-msg" id="qrmsg0"></div>
+      <div class="btn-row">
+        <button class="btn btn-muted" onclick="retryQuiz(0)">↺ Reintentar</button>
+        <button class="btn btn-java" onclick="nextPanel(0)">Siguiente tema →</button>
+      </div>
+    </div>
+    <button class="btn-next" id="qnext0" disabled onclick="nextQuizQ(0)">Siguiente pregunta →</button>
+  </div>
+</div><!-- /p0 -->
+
+
+<!-- ══════════════════════════════════════
+     TEMA 2: OPERADORES
+══════════════════════════════════════ -->
+<div class="panel" id="p1">
+  <div class="lcard">
+    <div class="lcard-head">
+      <div class="lcard-icon">⚙️</div>
+      <div><div class="lcard-num">TEMA 02 / 06</div><div class="lcard-title">Operadores</div></div>
+    </div>
+    <div class="lcard-body">
+
+      <div class="t-section">
+        <h3>Operadores Aritméticos</h3>
+        <div class="concept-grid">
+          <div class="ccard"><div class="ccard-kw">+</div><div class="ccard-desc">Suma: a + b</div></div>
+          <div class="ccard"><div class="ccard-kw">-</div><div class="ccard-desc">Resta: a - b</div></div>
+          <div class="ccard"><div class="ccard-kw">*</div><div class="ccard-desc">Multiplicación</div></div>
+          <div class="ccard"><div class="ccard-kw">/</div><div class="ccard-desc">División</div></div>
+          <div class="ccard"><div class="ccard-kw">%</div><div class="ccard-desc">Módulo (resto)</div></div>
+          <div class="ccard"><div class="ccard-kw">++/--</div><div class="ccard-desc">Incremento/Decremento</div></div>
+        </div>
+      </div>
+
+      <div class="t-section">
+        <h3>Operadores de Comparación y Lógicos</h3>
+        <table class="jtable">
+          <tr><th>Operador</th><th>Significado</th><th>Ejemplo</th></tr>
+          <tr><td>==</td><td>Igual a</td><td>edad == 18</td></tr>
+          <tr><td>!=</td><td>Diferente de</td><td>status != 0</td></tr>
+          <tr><td>&gt; / &lt;</td><td>Mayor / Menor</td><td>precio &gt; 100</td></tr>
+          <tr><td>&amp;&amp;</td><td>AND lógico</td><td>a &gt; 0 &amp;&amp; b &gt; 0</td></tr>
+          <tr><td>||</td><td>OR lógico</td><td>a == 0 || b == 0</td></tr>
+          <tr><td>!</td><td>NOT lógico</td><td>!activo</td></tr>
+        </table>
+      </div>
+
+      <div class="t-section">
+        <h3>Ejemplo completo</h3>
+        <div class="code-wrap">
+          <div class="code-bar"><div class="code-dots"><span class="cdot cr"></span><span class="cdot cy"></span><span class="cdot cg"></span></div><span class="code-file">Operadores.java</span></div>
+          <div class="code-body"><pre><span class="kw">int</span> <span class="var">a</span> = <span class="num">10</span>, <span class="var">b</span> = <span class="num">3</span>;
+
+<span class="tp">System</span>.out.<span class="fn">println</span>(<span class="var">a</span> + <span class="var">b</span>);   <span class="cmt">// 13</span>
+<span class="tp">System</span>.out.<span class="fn">println</span>(<span class="var">a</span> - <span class="var">b</span>);   <span class="cmt">// 7</span>
+<span class="tp">System</span>.out.<span class="fn">println</span>(<span class="var">a</span> * <span class="var">b</span>);   <span class="cmt">// 30</span>
+<span class="tp">System</span>.out.<span class="fn">println</span>(<span class="var">a</span> / <span class="var">b</span>);   <span class="cmt">// 3  ← división entera</span>
+<span class="tp">System</span>.out.<span class="fn">println</span>(<span class="var">a</span> % <span class="var">b</span>);   <span class="cmt">// 1  ← resto</span>
+
+<span class="kw">boolean</span> <span class="var">mayor</span> = (<span class="var">a</span> &gt; <span class="var">b</span>);      <span class="cmt">// true</span>
+<span class="kw">boolean</span> <span class="var">ambosPos</span> = (<span class="var">a</span> &gt; <span class="num">0</span> &amp;&amp; <span class="var">b</span> &gt; <span class="num">0</span>); <span class="cmt">// true</span>
+
+<span class="cmt">// Incremento</span>
+<span class="var">a</span>++;  <span class="cmt">// a = 11</span>
+<span class="var">b</span>--;  <span class="cmt">// b = 2</span>
+
+<span class="cmt">// Asignación compuesta</span>
+<span class="var">a</span> += <span class="num">5</span>;  <span class="cmt">// a = 16</span>
+<span class="var">b</span> *= <span class="num">3</span>;  <span class="cmt">// b = 6</span></pre></div>
+        </div>
+      </div>
+
+      <div class="ibox warn"><div class="ibox-lbl">⚠️ CUIDADO</div><strong>10 / 3 = 3</strong> en Java (no 3.33). Para decimales usa: <code style="font-family:'JetBrains Mono',monospace;font-size:12px">(double) 10 / 3</code> → 3.333...</div>
+
+    </div>
+  </div>
+
+  <div class="quiz" id="quiz1">
+    <div class="quiz-head"><span style="font-size:20px">🎯</span>
+      <div><div class="quiz-title">Quiz — Operadores</div><div class="quiz-sub" id="qsub1">5 PREGUNTAS</div></div>
+    </div>
+    <div class="qprog"><div class="qprog-fill" id="qpfill1" style="width:0%"></div></div>
+    <div id="qbody1"></div>
+    <div class="quiz-result" id="qresult1">
+      <div class="qr-score" id="qrscore1"></div><div class="qr-lbl">RESULTADO FINAL</div>
+      <div class="qr-msg" id="qrmsg1"></div>
+      <div class="btn-row"><button class="btn btn-muted" onclick="retryQuiz(1)">↺ Reintentar</button><button class="btn btn-java" onclick="nextPanel(1)">Siguiente tema →</button></div>
+    </div>
+    <button class="btn-next" id="qnext1" disabled onclick="nextQuizQ(1)">Siguiente pregunta →</button>
+  </div>
+</div><!-- /p1 -->
+
+
+<!-- ══════════════════════════════════════
+     TEMA 3: CONDICIONALES
+══════════════════════════════════════ -->
+<div class="panel" id="p2">
+  <div class="lcard">
+    <div class="lcard-head">
+      <div class="lcard-icon">🔀</div>
+      <div><div class="lcard-num">TEMA 03 / 06</div><div class="lcard-title">Condicionales</div></div>
+    </div>
+    <div class="lcard-body">
+
+      <div class="t-section">
+        <h3>if / else if / else</h3>
+        <p>Permiten ejecutar bloques de código según una condición booleana.</p>
+        <div class="code-wrap">
+          <div class="code-bar"><div class="code-dots"><span class="cdot cr"></span><span class="cdot cy"></span><span class="cdot cg"></span></div><span class="code-file">Condicional.java</span></div>
+          <div class="code-body"><pre><span class="kw">int</span> <span class="var">nota</span> = <span class="num">75</span>;
+
+<span class="kw">if</span> (<span class="var">nota</span> &gt;= <span class="num">90</span>) {
+    <span class="tp">System</span>.out.<span class="fn">println</span>(<span class="str">"Excelente"</span>);
+} <span class="kw">else if</span> (<span class="var">nota</span> &gt;= <span class="num">70</span>) {
+    <span class="tp">System</span>.out.<span class="fn">println</span>(<span class="str">"Aprobado"</span>);
+} <span class="kw">else if</span> (<span class="var">nota</span> &gt;= <span class="num">60</span>) {
+    <span class="tp">System</span>.out.<span class="fn">println</span>(<span class="str">"Regular"</span>);
+} <span class="kw">else</span> {
+    <span class="tp">System</span>.out.<span class="fn">println</span>(<span class="str">"Reprobado"</span>);
+}</pre></div>
+        </div>
+      </div>
+
+      <div class="t-section">
+        <h3>switch</h3>
+        <p>Ideal cuando comparas una variable contra valores exactos.</p>
+        <div class="code-wrap">
+          <div class="code-bar"><div class="code-dots"><span class="cdot cr"></span><span class="cdot cy"></span><span class="cdot cg"></span></div><span class="code-file">Switch.java</span></div>
+          <div class="code-body"><pre><span class="tp">String</span> <span class="var">dia</span> = <span class="str">"LUNES"</span>;
+
+<span class="kw">switch</span> (<span class="var">dia</span>) {
+    <span class="kw">case</span> <span class="str">"LUNES"</span>:
+        <span class="tp">System</span>.out.<span class="fn">println</span>(<span class="str">"Inicio de semana"</span>);
+        <span class="kw">break</span>;
+    <span class="kw">case</span> <span class="str">"VIERNES"</span>:
+        <span class="tp">System</span>.out.<span class="fn">println</span>(<span class="str">"¡Fin de semana!"</span>);
+        <span class="kw">break</span>;
+    <span class="kw">default</span>:
+        <span class="tp">System</span>.out.<span class="fn">println</span>(<span class="str">"Día normal"</span>);
+}</pre></div>
+        </div>
+      </div>
+
+      <div class="t-section">
+        <h3>Operador Ternario</h3>
+        <p>Forma compacta de if-else en una línea.</p>
+        <div class="code-wrap">
+          <div class="code-bar"><div class="code-dots"><span class="cdot cr"></span><span class="cdot cy"></span><span class="cdot cg"></span></div><span class="code-file">Ternario.java</span></div>
+          <div class="code-body"><pre><span class="kw">int</span> <span class="var">edad</span> = <span class="num">20</span>;
+<span class="tp">String</span> <span class="var">estado</span> = (<span class="var">edad</span> >= <span class="num">18</span>) ? <span class="str">"Mayor de edad"</span> : <span class="str">"Menor de edad"</span>;
+<span class="tp">System</span>.out.<span class="fn">println</span>(<span class="var">estado</span>); <span class="cmt">// Mayor de edad</span></pre></div>
+        </div>
+        <div class="ibox tip"><div class="ibox-lbl">💡 Sintaxis</div><code style="font-family:'JetBrains Mono',monospace;font-size:12px">condición ? valorSiTrue : valorSiFalse</code></div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="quiz" id="quiz2">
+    <div class="quiz-head"><span style="font-size:20px">🎯</span>
+      <div><div class="quiz-title">Quiz — Condicionales</div><div class="quiz-sub" id="qsub2">5 PREGUNTAS</div></div>
+    </div>
+    <div class="qprog"><div class="qprog-fill" id="qpfill2" style="width:0%"></div></div>
+    <div id="qbody2"></div>
+    <div class="quiz-result" id="qresult2">
+      <div class="qr-score" id="qrscore2"></div><div class="qr-lbl">RESULTADO FINAL</div>
+      <div class="qr-msg" id="qrmsg2"></div>
+      <div class="btn-row"><button class="btn btn-muted" onclick="retryQuiz(2)">↺ Reintentar</button><button class="btn btn-java" onclick="nextPanel(2)">Siguiente tema →</button></div>
+    </div>
+    <button class="btn-next" id="qnext2" disabled onclick="nextQuizQ(2)">Siguiente pregunta →</button>
+  </div>
+</div><!-- /p2 -->
+
+
+<!-- ══════════════════════════════════════
+     TEMA 4: CICLOS
+══════════════════════════════════════ -->
+<div class="panel" id="p3">
+  <div class="lcard">
+    <div class="lcard-head">
+      <div class="lcard-icon">🔄</div>
+      <div><div class="lcard-num">TEMA 04 / 06</div><div class="lcard-title">Ciclos (Loops)</div></div>
+    </div>
+    <div class="lcard-body">
+
+      <div class="t-section">
+        <h3>for — cuando sabes cuántas veces</h3>
+        <div class="code-wrap">
+          <div class="code-bar"><div class="code-dots"><span class="cdot cr"></span><span class="cdot cy"></span><span class="cdot cg"></span></div><span class="code-file">Ciclos.java</span></div>
+          <div class="code-body"><pre><span class="cmt">// Imprime del 1 al 5</span>
+<span class="kw">for</span> (<span class="kw">int</span> <span class="var">i</span> = <span class="num">1</span>; <span class="var">i</span> &lt;= <span class="num">5</span>; <span class="var">i</span>++) {
+    <span class="tp">System</span>.out.<span class="fn">println</span>(<span class="str">"Iteración: "</span> + <span class="var">i</span>);
+}
+
+<span class="cmt">// Tabla de multiplicar del 3</span>
+<span class="kw">for</span> (<span class="kw">int</span> <span class="var">n</span> = <span class="num">1</span>; <span class="var">n</span> &lt;= <span class="num">10</span>; <span class="var">n</span>++) {
+    <span class="tp">System</span>.out.<span class="fn">println</span>(<span class="str">"3 x "</span> + <span class="var">n</span> + <span class="str">" = "</span> + (<span class="num">3</span> * <span class="var">n</span>));
+}</pre></div>
+        </div>
+      </div>
+
+      <div class="t-section">
+        <h3>while — mientras se cumpla una condición</h3>
+        <div class="code-wrap">
+          <div class="code-bar"><div class="code-dots"><span class="cdot cr"></span><span class="cdot cy"></span><span class="cdot cg"></span></div><span class="code-file">While.java</span></div>
+          <div class="code-body"><pre><span class="kw">int</span> <span class="var">contador</span> = <span class="num">0</span>;
+<span class="kw">while</span> (<span class="var">contador</span> &lt; <span class="num">5</span>) {
+    <span class="tp">System</span>.out.<span class="fn">println</span>(<span class="str">"Contador: "</span> + <span class="var">contador</span>);
+    <span class="var">contador</span>++;  <span class="cmt">// ¡No olvides incrementar!</span>
+}</pre></div>
+        </div>
+      </div>
+
+      <div class="t-section">
+        <h3>do-while — ejecuta al menos una vez</h3>
+        <div class="code-wrap">
+          <div class="code-bar"><div class="code-dots"><span class="cdot cr"></span><span class="cdot cy"></span><span class="cdot cg"></span></div><span class="code-file">DoWhile.java</span></div>
+          <div class="code-body"><pre><span class="kw">int</span> <span class="var">x</span> = <span class="num">10</span>;
+<span class="kw">do</span> {
+    <span class="tp">System</span>.out.<span class="fn">println</span>(<span class="str">"x = "</span> + <span class="var">x</span>);
+    <span class="var">x</span>++;
+} <span class="kw">while</span> (<span class="var">x</span> &lt; <span class="num">5</span>); <span class="cmt">// Se ejecuta 1 vez aunque x >= 5</span></pre></div>
+        </div>
+      </div>
+
+      <div class="t-section">
+        <h3>break y continue</h3>
+        <div class="code-wrap">
+          <div class="code-bar"><div class="code-dots"><span class="cdot cr"></span><span class="cdot cy"></span><span class="cdot cg"></span></div><span class="code-file">BreakContinue.java</span></div>
+          <div class="code-body"><pre><span class="kw">for</span> (<span class="kw">int</span> <span class="var">i</span> = <span class="num">0</span>; <span class="var">i</span> &lt; <span class="num">10</span>; <span class="var">i</span>++) {
+    <span class="kw">if</span> (<span class="var">i</span> == <span class="num">3</span>) <span class="kw">continue</span>; <span class="cmt">// salta el 3</span>
+    <span class="kw">if</span> (<span class="var">i</span> == <span class="num">7</span>) <span class="kw">break</span>;    <span class="cmt">// detiene el loop en 7</span>
+    <span class="tp">System</span>.out.<span class="fn">println</span>(<span class="var">i</span>); <span class="cmt">// imprime 0,1,2,4,5,6</span>
+}</pre></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="quiz" id="quiz3">
+    <div class="quiz-head"><span style="font-size:20px">🎯</span>
+      <div><div class="quiz-title">Quiz — Ciclos</div><div class="quiz-sub" id="qsub3">5 PREGUNTAS</div></div>
+    </div>
+    <div class="qprog"><div class="qprog-fill" id="qpfill3" style="width:0%"></div></div>
+    <div id="qbody3"></div>
+    <div class="quiz-result" id="qresult3">
+      <div class="qr-score" id="qrscore3"></div><div class="qr-lbl">RESULTADO FINAL</div>
+      <div class="qr-msg" id="qrmsg3"></div>
+      <div class="btn-row"><button class="btn btn-muted" onclick="retryQuiz(3)">↺ Reintentar</button><button class="btn btn-java" onclick="nextPanel(3)">Siguiente tema →</button></div>
+    </div>
+    <button class="btn-next" id="qnext3" disabled onclick="nextQuizQ(3)">Siguiente pregunta →</button>
+  </div>
+</div><!-- /p3 -->
+
+
+<!-- ══════════════════════════════════════
+     TEMA 5: ARRAYS
+══════════════════════════════════════ -->
+<div class="panel" id="p4">
+  <div class="lcard">
+    <div class="lcard-head">
+      <div class="lcard-icon">📋</div>
+      <div><div class="lcard-num">TEMA 05 / 06</div><div class="lcard-title">Arrays (Arreglos)</div></div>
+    </div>
+    <div class="lcard-body">
+
+      <div class="t-section">
+        <h3>¿Qué es un array?</h3>
+        <p>Un array es una colección de elementos del <strong>mismo tipo</strong>, con tamaño fijo. El índice empieza en <strong>0</strong>.</p>
+        <div class="code-wrap">
+          <div class="code-bar"><div class="code-dots"><span class="cdot cr"></span><span class="cdot cy"></span><span class="cdot cg"></span></div><span class="code-file">Arrays.java</span></div>
+          <div class="code-body"><pre><span class="cmt">// Declarar e inicializar</span>
+<span class="kw">int</span>[] <span class="var">numeros</span> = {<span class="num">10</span>, <span class="num">20</span>, <span class="num">30</span>, <span class="num">40</span>, <span class="num">50</span>};
+
+<span class="cmt">// Acceder por índice</span>
+<span class="tp">System</span>.out.<span class="fn">println</span>(<span class="var">numeros</span>[<span class="num">0</span>]); <span class="cmt">// 10</span>
+<span class="tp">System</span>.out.<span class="fn">println</span>(<span class="var">numeros</span>[<span class="num">4</span>]); <span class="cmt">// 50</span>
+
+<span class="cmt">// Longitud</span>
+<span class="tp">System</span>.out.<span class="fn">println</span>(<span class="var">numeros</span>.length); <span class="cmt">// 5</span>
+
+<span class="cmt">// Modificar elemento</span>
+<span class="var">numeros</span>[<span class="num">2</span>] = <span class="num">99</span>; <span class="cmt">// {10, 20, 99, 40, 50}</span>
+
+<span class="cmt">// Recorrer con for-each</span>
+<span class="kw">for</span> (<span class="kw">int</span> <span class="var">n</span> : <span class="var">numeros</span>) {
+    <span class="tp">System</span>.out.<span class="fn">println</span>(<span class="var">n</span>);
+}</pre></div>
+        </div>
+      </div>
+
+      <div class="t-section">
+        <h3>Array de Strings</h3>
+        <div class="code-wrap">
+          <div class="code-bar"><div class="code-dots"><span class="cdot cr"></span><span class="cdot cy"></span><span class="cdot cg"></span></div><span class="code-file">ArrayStrings.java</span></div>
+          <div class="code-body"><pre><span class="tp">String</span>[] <span class="var">nombres</span> = {<span class="str">"Ana"</span>, <span class="str">"Luis"</span>, <span class="str">"María"</span>};
+
+<span class="kw">for</span> (<span class="kw">int</span> <span class="var">i</span> = <span class="num">0</span>; <span class="var">i</span> &lt; <span class="var">nombres</span>.length; <span class="var">i</span>++) {
+    <span class="tp">System</span>.out.<span class="fn">println</span>(<span class="str">"Hola, "</span> + <span class="var">nombres</span>[<span class="var">i</span>]);
+}</pre></div>
+        </div>
+      </div>
+
+      <div class="ibox warn"><div class="ibox-lbl">⚠️ ERROR COMÚN</div>Acceder a un índice fuera del rango genera <strong>ArrayIndexOutOfBoundsException</strong>. Si el array tiene 5 elementos, los índices válidos son 0–4.</div>
+
+    </div>
+  </div>
+
+  <div class="quiz" id="quiz4">
+    <div class="quiz-head"><span style="font-size:20px">🎯</span>
+      <div><div class="quiz-title">Quiz — Arrays</div><div class="quiz-sub" id="qsub4">5 PREGUNTAS</div></div>
+    </div>
+    <div class="qprog"><div class="qprog-fill" id="qpfill4" style="width:0%"></div></div>
+    <div id="qbody4"></div>
+    <div class="quiz-result" id="qresult4">
+      <div class="qr-score" id="qrscore4"></div><div class="qr-lbl">RESULTADO FINAL</div>
+      <div class="qr-msg" id="qrmsg4"></div>
+      <div class="btn-row"><button class="btn btn-muted" onclick="retryQuiz(4)">↺ Reintentar</button><button class="btn btn-java" onclick="nextPanel(4)">Siguiente tema →</button></div>
+    </div>
+    <button class="btn-next" id="qnext4" disabled onclick="nextQuizQ(4)">Siguiente pregunta →</button>
+  </div>
+</div><!-- /p4 -->
+
+
+<!-- ══════════════════════════════════════
+     TEMA 6: MÉTODOS
+══════════════════════════════════════ -->
+<div class="panel" id="p5">
+  <div class="lcard">
+    <div class="lcard-head">
+      <div class="lcard-icon">🧩</div>
+      <div><div class="lcard-num">TEMA 06 / 06</div><div class="lcard-title">Métodos</div></div>
+    </div>
+    <div class="lcard-body">
+
+      <div class="t-section">
+        <h3>¿Qué es un método?</h3>
+        <p>Un método es un <strong>bloque de código reutilizable</strong> que realiza una tarea. En Java todo método pertenece a una clase.</p>
+        <div class="ibox"><div class="ibox-lbl">📌 Anatomía</div>
+          <code style="font-family:'JetBrains Mono',monospace;font-size:12px">modificador tipoRetorno nombreMetodo(parámetros) { ... }</code>
+        </div>
+      </div>
+
+      <div class="t-section">
+        <h3>Método sin retorno (void)</h3>
+        <div class="code-wrap">
+          <div class="code-bar"><div class="code-dots"><span class="cdot cr"></span><span class="cdot cy"></span><span class="cdot cg"></span></div><span class="code-file">Metodos.java</span></div>
+          <div class="code-body"><pre><span class="kw">public class</span> <span class="cls">Metodos</span> {
+
+    <span class="cmt">// Método void — no retorna nada</span>
+    <span class="kw">public static void</span> <span class="fn">saludar</span>(<span class="tp">String</span> <span class="var">nombre</span>) {
+        <span class="tp">System</span>.out.<span class="fn">println</span>(<span class="str">"Hola, "</span> + <span class="var">nombre</span> + <span class="str">"!"</span>);
+    }
+
+    <span class="cmt">// Método con retorno int</span>
+    <span class="kw">public static int</span> <span class="fn">sumar</span>(<span class="kw">int</span> <span class="var">a</span>, <span class="kw">int</span> <span class="var">b</span>) {
+        <span class="kw">return</span> <span class="var">a</span> + <span class="var">b</span>;
+    }
+
+    <span class="cmt">// Método con retorno String</span>
+    <span class="kw">public static</span> <span class="tp">String</span> <span class="fn">clasificar</span>(<span class="kw">int</span> <span class="var">nota</span>) {
+        <span class="kw">return</span> (<span class="var">nota</span> >= <span class="num">70</span>) ? <span class="str">"Aprobado"</span> : <span class="str">"Reprobado"</span>;
+    }
+
+    <span class="kw">public static void</span> <span class="fn">main</span>(<span class="tp">String</span>[] <span class="var">args</span>) {
+        <span class="fn">saludar</span>(<span class="str">"Carlos"</span>);          <span class="cmt">// Hola, Carlos!</span>
+        <span class="kw">int</span> <span class="var">res</span> = <span class="fn">sumar</span>(<span class="num">5</span>, <span class="num">8</span>);      <span class="cmt">// 13</span>
+        <span class="tp">System</span>.out.<span class="fn">println</span>(<span class="var">res</span>);
+        <span class="tp">System</span>.out.<span class="fn">println</span>(<span class="fn">clasificar</span>(<span class="num">85</span>)); <span class="cmt">// Aprobado</span>
+    }
+}</pre></div>
+        </div>
+      </div>
+
+      <div class="t-section">
+        <h3>Sobrecarga de métodos (Overloading)</h3>
+        <p>Mismo nombre, diferentes parámetros. Java elige cuál usar según los argumentos.</p>
+        <div class="code-wrap">
+          <div class="code-bar"><div class="code-dots"><span class="cdot cr"></span><span class="cdot cy"></span><span class="cdot cg"></span></div><span class="code-file">Overload.java</span></div>
+          <div class="code-body"><pre><span class="kw">public static int</span>    <span class="fn">area</span>(<span class="kw">int</span> <span class="var">lado</span>)            { <span class="kw">return</span> <span class="var">lado</span> * <span class="var">lado</span>; }
+<span class="kw">public static int</span>    <span class="fn">area</span>(<span class="kw">int</span> <span class="var">ancho</span>, <span class="kw">int</span> <span class="var">alto</span>) { <span class="kw">return</span> <span class="var">ancho</span> * <span class="var">alto</span>; }
+<span class="kw">public static double</span> <span class="fn">area</span>(<span class="kw">double</span> <span class="var">radio</span>)         { <span class="kw">return</span> <span class="num">3.14159</span> * <span class="var">radio</span> * <span class="var">radio</span>; }
+
+<span class="cmt">// Java elige automáticamente</span>
+<span class="fn">area</span>(<span class="num">5</span>);           <span class="cmt">// → 25</span>
+<span class="fn">area</span>(<span class="num">4</span>, <span class="num">6</span>);        <span class="cmt">// → 24</span>
+<span class="fn">area</span>(<span class="num">3.0</span>);         <span class="cmt">// → 28.27</span></pre></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="quiz" id="quiz5">
+    <div class="quiz-head"><span style="font-size:20px">🎯</span>
+      <div><div class="quiz-title">Quiz — Métodos</div><div class="quiz-sub" id="qsub5">5 PREGUNTAS</div></div>
+    </div>
+    <div class="qprog"><div class="qprog-fill" id="qpfill5" style="width:0%"></div></div>
+    <div id="qbody5"></div>
+    <div class="quiz-result" id="qresult5">
+      <div class="qr-score" id="qrscore5"></div><div class="qr-lbl">RESULTADO FINAL</div>
+      <div class="qr-msg" id="qrmsg5"></div>
+      <div class="btn-row"><button class="btn btn-muted" onclick="retryQuiz(5)">↺ Reintentar</button><button class="btn btn-java" onclick="showComplete()">Ver resultado final 🏆</button></div>
+    </div>
+    <button class="btn-next" id="qnext5" disabled onclick="nextQuizQ(5)">Siguiente pregunta →</button>
+  </div>
+</div><!-- /p5 -->
+
+
+<!-- NIVEL COMPLETADO -->
+<div class="complete" id="complete">
+  <div class="comp-emoji">☕</div>
+  <div class="comp-title" style="color:var(--java)">¡Nivel 1 Completado!</div>
+  <div class="comp-sub">Dominaste los fundamentos de Java: variables, operadores, condicionales, ciclos, arrays y métodos. Ya tienes la base para avanzar al Nivel 2.</div>
+  <div class="btn-row">
+    <button class="btn btn-muted" onclick="restartCourse()">↺ Reiniciar curso</button>
+    <button class="btn btn-java" onclick="alert('¡Continúa con Java Nivel 2 — POO!')">Nivel 2 — POO →</button>
+  </div>
+</div>
+
+</main>
+</div><!-- /layout -->
+</div><!-- /wrap -->
+
+<script>
+// ═══════════════════════════════════════
+// QUIZ DATA
+// ═══════════════════════════════════════
+const QUIZZES = [
+  // QUIZ 0 — Variables
+  [
+    { q:"¿Cuál es el tipo correcto para guardar el valor 3.14?",
+      code:null,
+      opts:["int pi = 3.14;","double pi = 3.14;","float pi = 3.14;","String pi = 3.14;"],
+      ans:1, exp:"double es el tipo de 64 bits para decimales. float necesita sufijo 'f'." },
+    { q:"¿Qué imprime este código?",
+      code:'String nombre = "Java";\nSystem.out.println("Hola " + nombre);',
+      opts:["Hola nombre","Hola Java","nombre","Error de compilación"],
+      ans:1, exp:"El operador + concatena el string literal con el valor de la variable." },
+    { q:"¿Cómo se declara una constante correctamente?",
+      code:null,
+      opts:["const int MAX = 100;","final int MAX = 100;","static int MAX = 100;","readonly int MAX = 100;"],
+      ans:1, exp:"En Java se usa la palabra clave 'final' para declarar constantes." },
+    { q:"¿Cuántos bits tiene un tipo int en Java?",
+      code:null,
+      opts:["8 bits","16 bits","32 bits","64 bits"],
+      ans:2, exp:"int ocupa 32 bits (4 bytes) y puede guardar valores de -2^31 a 2^31-1." },
+    { q:"¿Qué valor tiene 'activo' después de esta línea?",
+      code:"boolean activo = !false;",
+      opts:["false","true","null","Error"],
+      ans:1, exp:"El operador ! niega el valor. !false es true." }
+  ],
+  // QUIZ 1 — Operadores
+  [
+    { q:"¿Qué imprime este código?",
+      code:"System.out.println(10 / 3);",
+      opts:["3.33","3","4","3.0"],
+      ans:1, exp:"División entre dos int en Java produce un int. 10/3 = 3 (parte decimal se descarta)." },
+    { q:"¿Cuál es el resultado de 10 % 3?",
+      code:null,
+      opts:["3","0","1","3.3"],
+      ans:2, exp:"El operador % devuelve el resto. 10 = 3×3 + 1. Resultado: 1." },
+    { q:"¿Qué operador verifica que DOS condiciones sean verdaderas?",
+      code:null,
+      opts:["||","!","&&","=="],
+      ans:2, exp:"&& es el AND lógico. Retorna true solo si AMBAS condiciones son true." },
+    { q:"¿Cuánto vale 'x' después de ejecutar este código?",
+      code:"int x = 5;\nx += 3;\nx *= 2;",
+      opts:["8","16","13","11"],
+      ans:1, exp:"x=5, x+=3 → x=8, x*=2 → x=16." },
+    { q:"¿Qué produce este código?",
+      code:"int a = 3;\nSystem.out.println(a++);",
+      opts:["4","3","2","Error"],
+      ans:1, exp:"El operador post-incremento (a++) devuelve el valor ANTES de incrementar. Imprime 3, luego a queda en 4." }
+  ],
+  // QUIZ 2 — Condicionales
+  [
+    { q:"Si nota = 65, ¿qué imprime este código?",
+      code:'if (nota >= 90) {\n  System.out.println("A");\n} else if (nota >= 70) {\n  System.out.println("B");\n} else {\n  System.out.println("C");\n}',
+      opts:["A","B","C","Nada"],
+      ans:2, exp:"nota=65 no cumple >= 90 ni >= 70, por eso entra al bloque else → C." },
+    { q:"¿Qué hace el operador ternario?",
+      code:null,
+      opts:["Divide entre 3","Es una forma compacta de if-else","Crea 3 variables","No existe en Java"],
+      ans:1, exp:"El ternario (condición ? valorTrue : valorFalse) es un if-else en una sola línea." },
+    { q:"¿Qué palabra se usa en switch para evitar que se ejecuten los demás casos?",
+      code:null,
+      opts:["stop","exit","return","break"],
+      ans:3, exp:"'break' termina la ejecución del case actual. Sin él, el código 'cae' al siguiente case." },
+    { q:"¿Cuál es el resultado de esta expresión?",
+      code:'String r = (5 > 3) ? "mayor" : "menor";',
+      opts:["menor","mayor","null","Error"],
+      ans:1, exp:"5 > 3 es true, entonces r = 'mayor'." },
+    { q:"¿Cuántas veces puede entrar un valor al bloque default de un switch?",
+      code:null,
+      opts:["Siempre","Nunca","Solo si ningún case coincide","Dos veces"],
+      ans:2, exp:"El bloque default se ejecuta solo cuando ningún case coincide con el valor evaluado." }
+  ],
+  // QUIZ 3 — Ciclos
+  [
+    { q:"¿Cuántas veces se imprime 'Hola' en este código?",
+      code:'for (int i = 0; i < 5; i++) {\n  System.out.println("Hola");\n}',
+      opts:["4","5","6","Infinitas"],
+      ans:1, exp:"i va de 0 a 4 (5 valores). La condición i < 5 se cumple 5 veces." },
+    { q:"¿Qué diferencia tiene do-while respecto a while?",
+      code:null,
+      opts:["Es más rápido","Siempre se ejecuta al menos una vez","Solo funciona con números","No existe en Java"],
+      ans:1, exp:"do-while evalúa la condición DESPUÉS de ejecutar el bloque, garantizando al menos una ejecución." },
+    { q:"¿Qué hace 'continue' dentro de un ciclo?",
+      code:null,
+      opts:["Termina el programa","Salta a la siguiente iteración","Sale del ciclo completamente","No hace nada"],
+      ans:1, exp:"'continue' omite el resto del cuerpo del ciclo y pasa directamente a la siguiente iteración." },
+    { q:"¿Qué imprime este código?",
+      code:'for (int i = 1; i <= 3; i++) {\n  System.out.print(i + " ");\n}',
+      opts:["1 2 3","0 1 2","1 2 3 4","1 2"],
+      ans:0, exp:"i empieza en 1, se imprime mientras i <= 3: imprime 1, 2, 3 separados por espacio." },
+    { q:"¿Cuántas veces se ejecuta el cuerpo del do-while con x=10?",
+      code:"int x = 10;\ndo {\n  x++;\n} while (x < 5);",
+      opts:["0 veces","1 vez","5 veces","Infinitas"],
+      ans:1, exp:"do-while ejecuta el cuerpo primero antes de evaluar la condición. x=10 no cumple x<5, pero ya se ejecutó 1 vez." }
+  ],
+  // QUIZ 4 — Arrays
+  [
+    { q:"¿Cuál es el índice del PRIMER elemento de un array en Java?",
+      code:null,
+      opts:["1","0","-1","Depende del tipo"],
+      ans:1, exp:"En Java (y la mayoría de lenguajes), los arrays empiezan en el índice 0." },
+    { q:"¿Qué imprime este código?",
+      code:'int[] nums = {5, 10, 15, 20};\nSystem.out.println(nums[2]);',
+      opts:["10","15","20","5"],
+      ans:1, exp:"nums[2] accede al tercer elemento (índice 2) que es 15." },
+    { q:"¿Cómo se obtiene la cantidad de elementos de un array llamado 'datos'?",
+      code:null,
+      opts:["datos.size()","datos.count()","datos.length","length(datos)"],
+      ans:2, exp:"En Java, los arrays tienen la propiedad .length (sin paréntesis) para obtener su tamaño." },
+    { q:"¿Qué excepción lanza Java si accedes a un índice inválido?",
+      code:null,
+      opts:["NullPointerException","IndexOutOfBoundsException","ArrayIndexOutOfBoundsException","InvalidIndexException"],
+      ans:2, exp:"ArrayIndexOutOfBoundsException se lanza cuando el índice es negativo o mayor/igual que la longitud." },
+    { q:"¿Cuál es la forma correcta de declarar un array de 3 Strings?",
+      code:null,
+      opts:['String[] nombres = {"Ana","Luis","María"};','String nombres[] = new String(3);','Array<String> nombres = {"Ana","Luis"};','string[] nombres = {"Ana","Luis","María"};'],
+      ans:0, exp:'La sintaxis correcta es: TipoDeElemento[] nombre = {valor1, valor2, ...};' }
+  ],
+  // QUIZ 5 — Métodos
+  [
+    { q:"¿Qué tipo de retorno se usa cuando un método NO devuelve ningún valor?",
+      code:null,
+      opts:["null","none","void","empty"],
+      ans:2, exp:"'void' indica que el método no retorna ningún valor." },
+    { q:"¿Qué imprime este código?",
+      code:'public static int doble(int n) {\n  return n * 2;\n}\n// en main:\nSystem.out.println(doble(7));',
+      opts:["7","2","14","49"],
+      ans:2, exp:"doble(7) retorna 7 * 2 = 14." },
+    { q:"¿Qué es la sobrecarga (overloading) de métodos?",
+      code:null,
+      opts:["Llamar un método desde otro","Tener métodos con el mismo nombre pero distintos parámetros","Ejecutar un método más de una vez","Cambiar el nombre de un método"],
+      ans:1, exp:"Overloading = mismo nombre, diferente firma (número/tipo de parámetros). Java elige cuál ejecutar." },
+    { q:"¿Cuál es el orden correcto en la declaración de un método?",
+      code:null,
+      opts:["nombre tipoRetorno modificador(params)","modificador tipoRetorno nombre(params)","tipoRetorno modificador nombre(params)","params modificador tipoRetorno nombre"],
+      ans:1, exp:"La sintaxis Java es: modificador tipoRetorno nombre(parámetros) { cuerpo }" },
+    { q:"¿Qué hace la palabra clave 'return' en un método?",
+      code:null,
+      opts:["Inicia el método","Termina el programa","Devuelve un valor y termina el método","Llama a otro método"],
+      ans:2, exp:"'return' devuelve un valor al llamador y termina la ejecución del método inmediatamente." }
+  ]
+];
+
+// ═══════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════
+const state = {
+  current: 0,
+  quizState: Array(6).fill(null).map(() => ({
+    qi: 0, score: 0, answered: false, done: false
+  })),
+  topicsDone: Array(6).fill(false)
+};
+
+// ═══════════════════════════════════════
+// NAVIGATION
+// ═══════════════════════════════════════
+function showPanel(idx, btn) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.sb-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('p' + idx).classList.add('active');
+  btn.classList.add('active');
+  state.current = idx;
+  initQuizIfNeeded(idx);
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function nextPanel(idx) {
+  const next = idx + 1;
+  if (next >= 6) { showComplete(); return; }
+  const btns = document.querySelectorAll('.sb-btn');
+  showPanel(next, btns[next]);
+}
+
+function restartCourse() {
+  state.quizState = Array(6).fill(null).map(() => ({ qi:0, score:0, answered:false, done:false }));
+  state.topicsDone = Array(6).fill(false);
+  document.getElementById('complete').style.display = 'none';
+  document.querySelectorAll('.sb-btn').forEach(b => b.classList.remove('done'));
+  document.getElementById('progTxt').textContent = '0 / 6';
+  QUIZZES.forEach((_,i) => {
+    document.getElementById('qresult'+i).style.display = 'none';
+    document.getElementById('qnext'+i).disabled = true;
+    document.getElementById('qbody'+i).innerHTML = '';
+    document.getElementById('qpfill'+i).style.width = '0%';
+  });
+  const btns = document.querySelectorAll('.sb-btn');
+  showPanel(0, btns[0]);
+}
+
+function showComplete() {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.sb-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('complete').style.display = 'block';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ═══════════════════════════════════════
+// QUIZ ENGINE
+// ═══════════════════════════════════════
+function initQuizIfNeeded(idx) {
+  const s = state.quizState[idx];
+  if (s.done) return;
+  if (document.getElementById('qbody'+idx).innerHTML === '') {
+    renderQuizQ(idx);
+  }
+}
+
+function renderQuizQ(idx) {
+  const s = state.quizState[idx];
+  const qs = QUIZZES[idx];
+  if (s.qi >= qs.length) { showQuizResult(idx); return; }
+
+  const q = qs[s.qi];
+  const pct = Math.round((s.qi / qs.length) * 100);
+  document.getElementById('qpfill'+idx).style.width = pct + '%';
+  document.getElementById('qsub'+idx).textContent = `PREGUNTA ${s.qi+1} / ${qs.length}`;
+
+  const codeHtml = q.code
+    ? `<div class="qq-code">${q.code.replace(/</g,'&lt;').replace(/>/g,'&gt;')}</div>`
+    : '';
+
+  const optsHtml = q.opts.map((o,i) =>
+    `<button class="qopt" onclick="answerQ(${idx},${i})">${o}</button>`
+  ).join('');
+
+  document.getElementById('qbody'+idx).innerHTML = `
+    <div class="quiz-q">
+      <div class="qq-num">Q${s.qi+1} / ${qs.length}</div>
+      <div class="qq-text">${q.q}</div>
+      ${codeHtml}
+      <div class="quiz-opts">${optsHtml}</div>
+      <div class="qfb" id="qfb${idx}"></div>
+    </div>`;
+
+  s.answered = false;
+  document.getElementById('qnext'+idx).disabled = true;
+}
+
+function answerQ(idx, chosen) {
+  const s = state.quizState[idx];
+  if (s.answered) return;
+  s.answered = true;
+
+  const q = QUIZZES[idx][s.qi];
+  const ok = chosen === q.ans;
+  if (ok) s.score++;
+
+  const opts = document.querySelectorAll(`#qbody${idx} .qopt`);
+  opts.forEach((o,i) => {
+    o.disabled = true;
+    if (i === q.ans) o.classList.add('correct');
+    else if (i === chosen && !ok) o.classList.add('wrong');
+  });
+
+  const fb = document.getElementById('qfb'+idx);
+  fb.style.display = 'block';
+  fb.className = 'qfb ' + (ok ? 'ok' : 'fail');
+  fb.textContent = (ok ? '✅ Correcto! ' : '❌ Incorrecto. ') + q.exp;
+
+  document.getElementById('qnext'+idx).disabled = false;
+}
+
+function nextQuizQ(idx) {
+  const s = state.quizState[idx];
+  s.qi++;
+  s.answered = false;
+  if (s.qi >= QUIZZES[idx].length) {
+    showQuizResult(idx);
+  } else {
+    renderQuizQ(idx);
+  }
+}
+
+function showQuizResult(idx) {
+  const s = state.quizState[idx];
+  const total = QUIZZES[idx].length;
+  const pct = Math.round((s.score / total) * 100);
+  const color = pct >= 80 ? 'var(--success)' : pct >= 60 ? 'var(--java)' : 'var(--error)';
+  const msg = pct >= 80 ? '¡Excelente! Puedes avanzar al siguiente tema con confianza.' :
+              pct >= 60 ? 'Buen trabajo. Repasa los puntos débiles y continúa.' :
+              'Revisa la teoría y vuelve a intentar el quiz.';
+
+  document.getElementById('qpfill'+idx).style.width = '100%';
+  document.getElementById('qbody'+idx).innerHTML = '';
+  document.getElementById('qnext'+idx).style.display = 'none';
+
+  const result = document.getElementById('qresult'+idx);
+  result.style.display = 'block';
+  document.getElementById('qrscore'+idx).textContent = pct + '%';
+  document.getElementById('qrscore'+idx).style.color = color;
+  document.getElementById('qrmsg'+idx).textContent = msg;
+
+  s.done = true;
+  markDone(idx);
+}
+
+function markDone(idx) {
+  state.topicsDone[idx] = true;
+  const btns = document.querySelectorAll('.sb-btn');
+  btns[idx].classList.add('done');
+  const done = state.topicsDone.filter(Boolean).length;
+  document.getElementById('progTxt').textContent = done + ' / 6';
+}
+
+function retryQuiz(idx) {
+  const s = state.quizState[idx];
+  s.qi = 0; s.score = 0; s.answered = false; s.done = false;
+  document.getElementById('qresult'+idx).style.display = 'none';
+  document.getElementById('qnext'+idx).style.display = 'flex';
+  document.getElementById('qnext'+idx).disabled = true;
+  document.getElementById('qpfill'+idx).style.width = '0%';
+  renderQuizQ(idx);
+}
+
+// INIT
+initQuizIfNeeded(0);
+</script>
+</body>
+</html>
